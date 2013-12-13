@@ -14,7 +14,7 @@
             (p 2 (first candidates)))
            ((null p) (nreverse result)))))
 
-(defun prime-factor (n)
+(defun prime-factorization (n)
   (let ((candidates (primes-up-to (sqrt n)))
         (x n)
         (p 2)
