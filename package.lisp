@@ -1,6 +1,10 @@
 (defpackage #:prime-utils
   (:use :cl
-        :cl-ana.list-utils)
+   :cl-ana.list-utils)
+  (:shadowing-import-from :cl-generator
+                          :defun*
+                          :iter-next
+                          :yield)
   (:export
    :primes
    :prime-factorization

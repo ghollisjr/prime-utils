@@ -2,7 +2,10 @@
 
 ;; Generator for prime numbers.  Need to fix defun* doc string
 ;; handling.
-(cl-generator:defun* primes ()
+;;
+;; Not sure if this is a sieve or how this compares to a sieve, needs
+;; benchmarking.
+(defun* primes ()
   "Generator for prime numbers"
   (let* ((primes NIL)
          (last-cons NIL))
@@ -21,13 +24,21 @@
                   ((or (null ps)
                        (> p (sqrt i)))
                    (add-prime i)
-                   (cl-generator:yield i))
+                   (yield i))
                (when (zerop (mod i p))
                  (return-from prime-test NIL))))))))
 
 ;; this function could use optimizing, it looks like a slight
 ;; modification of the sieve of eratosthenes.
 (defun primes-up-to (n)
+  "Returns a list of the prime numbers less than or equal to n."
+  (let* ((gen (primes)))
+    (loop
+      for p = (funcall (iter-next gen))
+      while (<= p n)
+      collecting p)))
+
+(defun primes-up-to-old (n)
   "Returns a list of the prime numbers less than or equal to n."
   (if (< n 2)
       nil
@@ -47,27 +58,27 @@ relatively fast."
          (prime-index 2)
          (primes nil)
          (candidates (make-array n :element-type 'boolean
-                                 :initial-element t)))
+                                   :initial-element t)))
     ;; initialize candidates
     (setf (aref candidates 0) nil) ; 1 isn't prime
     ;; initialize primes
     (push 2 primes)
     ;; loop
     (loop
-       while continue
-       do
+      while continue
+      do
          (progn
            ;; mark elements
            (loop
-              for i = (* 2 prime-index) then (+ i prime-index)
-              while (<= i n)
-              do
+             for i = (* 2 prime-index) then (+ i prime-index)
+             while (<= i n)
+             do
                 (when (aref candidates (1- i))
                   (setf (aref candidates (1- i))
                         nil)))
            ;; get next prime
            (let* ((next
-                   (position t candidates :start prime-index)))
+                    (position t candidates :start prime-index)))
              (if next
                  (progn
                    (incf next)
@@ -76,13 +87,23 @@ relatively fast."
                  (setf continue nil)))))
     (reverse primes)))
 
-;; Could be improved by not using primes-up-to, but instead creating a
-;; closure that would generate each prime sequentially.  Would
-;; potentially need a different algorithm to generate the primes.
-;;
-;; UPDATE: I have a primes generator, which is what the above would
-;; need.  Should make another version and compare performance.
 (defun prime-factorization (n)
+  (let ((gen (primes))
+        (result ()))
+    (loop
+      for p = (funcall (iter-next gen))
+      while (<= p (sqrt n))
+      do
+         (when (zerop (mod n p))
+           (setf n (floor n p))
+           (push p result)))
+    (when (not (= 1 n))
+      (push n result))
+    (reverse (if (null result)
+                 (list (cons n 1))
+                 (compress result :singleton-pairs t)))))
+
+(defun prime-factorization-old (n)
   (let ((candidates (primes-up-to (sqrt n)))
         (x n)
         (p 2)
