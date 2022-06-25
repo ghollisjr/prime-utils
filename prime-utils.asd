@@ -3,7 +3,8 @@
   :author "Gary Hollis"
   :license ""
   :description "Basic prime number utilities"
-  :depends-on (#:generic-math
-               #:list-utils)
+  :depends-on (#:cl-ana.generic-math
+               #:cl-ana.list-utils
+               #:cl-generator)
   :components ((:file "package")
                (:file "prime-utils")))

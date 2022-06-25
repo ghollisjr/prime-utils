@@ -1,7 +1,10 @@
 (defpackage #:prime-utils
   (:use :cl
-        :list-utils)
-  (:export :prime-factorization
-           :primes-up-to))
+        :cl-ana.list-utils)
+  (:export
+   :primes
+   :prime-factorization
+   :primes-up-to
+   :primes-sieve))
 
-(gmath:use-gmath :prime-utils)
+(cl-ana.gmath:use-gmath :prime-utils)
