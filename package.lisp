@@ -4,7 +4,8 @@
   (:shadowing-import-from :cl-generator
                           :defun*
                           :iter-next
-                          :yield)
+                          :yield
+                          :yield*)
   (:export
    :primes
    :prime-factorization
