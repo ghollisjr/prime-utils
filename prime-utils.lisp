@@ -62,10 +62,10 @@ relatively fast."
          (continue t)
          (prime-index 2)
          (primes nil)
-         (candidates (make-array n :element-type 'boolean
-                                   :initial-element t)))
+         (candidates (make-array n :element-type 'bit
+                                   :initial-element 1)))
     ;; initialize candidates
-    (setf (aref candidates 0) nil) ; 1 isn't prime
+    (setf (aref candidates 0) 0) ; 1 isn't prime
     ;; initialize primes
     (push 2 primes)
     ;; loop
@@ -80,47 +80,10 @@ relatively fast."
              do
                 (when (aref candidates (1- i))
                   (setf (aref candidates (1- i))
-                        nil)))
+                        0)))
            ;; get next prime
            (let* ((next
-                    (position t candidates :start prime-index)))
-             (if next
-                 (progn
-                   (incf next)
-                   (push next primes)
-                   (setf prime-index next))
-                 (setf continue nil)))))
-    (reverse primes)))
-
-(defun primes-sieve-new (n)
-  "Uses sieve approach to generate primes.  Memory intensive,
-relatively fast."
-  (let* ((n (floor n))
-         (continue t)
-         (prime-index 2)
-         (primes nil)
-         (candidates (make-array n :element-type 'boolean
-                                   :initial-element t)))
-    ;; initialize candidates
-    (setf (aref candidates 0) nil) ; 1 isn't prime
-    ;; initialize primes
-    (push 2 primes)
-    ;; loop
-    (loop
-      while continue
-      do
-         (progn
-           ;; mark elements
-           (loop
-             for i = (* 2 prime-index) then (+ i prime-index)
-             while (<= i n)
-             do
-                (when (aref candidates (1- i))
-                  (setf (aref candidates (1- i))
-                        nil)))
-           ;; get next prime
-           (let* ((next
-                    (position t candidates :start prime-index)))
+                    (position 1 candidates :start prime-index)))
              (if next
                  (progn
                    (incf next)

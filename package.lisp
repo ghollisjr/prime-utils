@@ -1,8 +1,10 @@
 (defpackage #:prime-utils
-  (:use :cl
-   :cl-ana.list-utils)
-  (:use :cl-generator
-        :cl-generator-util)
+  (:use
+   :cl
+   :cl-ana.list-utils
+   :cl-generator
+   :cl-generator-util
+   :intvec)
   (:export
    ;; uses generators
    :primes*
