@@ -3,8 +3,7 @@
    :cl
    :cl-ana.list-utils
    :cl-generator
-   :cl-generator-util
-   :intvec)
+   :cl-generator-util)
   (:export
    ;; uses generators
    :primes*
