@@ -1,5 +1,10 @@
 (in-package :prime-utils)
 
+(declaim (optimize (speed 3)
+                   (space 3)
+                   (debug 1)
+                   (safety 1)))
+
 ;; Generator for prime numbers.  Need to fix defun* doc string
 ;; handling.
 ;;
