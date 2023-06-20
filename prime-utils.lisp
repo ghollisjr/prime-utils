@@ -63,39 +63,40 @@ primes-sieve due to lower memory use."
 (defun primes-sieve (n)
   "Uses sieve approach to generate primes.  Memory intensive,
 relatively fast."
-  (let* ((n (floor n))
-         (continue t)
-         (prime-index 2)
-         (primes nil)
-         (candidates (make-array n :element-type 'bit
-                                   :initial-element 1)))
-    ;; initialize candidates
-    (setf (aref candidates 0) 0) ; 1 isn't prime
-    ;; initialize primes
-    (push 2 primes)
-    ;; loop
-    (loop
-      while continue
-      do
-         (progn
-           ;; mark elements
-           (loop
-             for i = (* 2 prime-index) then (+ i prime-index)
-             while (<= i n)
-             do
-                (when (aref candidates (1- i))
-                  (setf (aref candidates (1- i))
-                        0)))
-           ;; get next prime
-           (let* ((next
-                    (position 1 candidates :start prime-index)))
-             (if next
-                 (progn
-                   (incf next)
-                   (push next primes)
-                   (setf prime-index next))
-                 (setf continue nil)))))
-    (reverse primes)))
+  (when (>= n 2)
+    (let* ((n (floor n))
+           (continue t)
+           (prime-index 2)
+           (primes nil)
+           (candidates (make-array n :element-type 'bit
+                                     :initial-element 1)))
+      ;; initialize candidates
+      (setf (aref candidates 0) 0) ; 1 isn't prime
+      ;; initialize primes
+      (push 2 primes)
+      ;; loop
+      (loop
+        while continue
+        do
+           (progn
+             ;; mark elements
+             (loop
+               for i = (* 2 prime-index) then (+ i prime-index)
+               while (<= i n)
+               do
+                  (when (aref candidates (1- i))
+                    (setf (aref candidates (1- i))
+                          0)))
+             ;; get next prime
+             (let* ((next
+                      (position 1 candidates :start prime-index)))
+               (if next
+                   (progn
+                     (incf next)
+                     (push next primes)
+                     (setf prime-index next))
+                   (setf continue nil)))))
+      (reverse primes))))
 
 (defun prime-factorization* (n)
   "Slower than prime-factorization due to using generators, but useful
@@ -140,3 +141,7 @@ of all relevant prime factors."
               (list (cons n 1))
               (compress result :singleton-pairs t))
           #'< :key #'first)))
+
+(defun prime-count (n)
+  "Count the number of primes <= n.  Uses #'primes-sieve."
+  (length (primes-sieve n)))

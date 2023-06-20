@@ -9,6 +9,7 @@
    :primes*
    ;; imperative (faster)
    :prime-factorization
-   :primes-sieve))
+   :primes-sieve
+   :prime-count))
 
 (cl-ana.gmath:use-gmath :prime-utils)
